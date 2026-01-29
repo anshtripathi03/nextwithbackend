@@ -21,17 +21,18 @@ export const mailer = async ({ mail, mailtype, userID }: any) => {
       host: "sandbox.smtp.mailtrap.io",
       port: 2525,
       auth: {
-        user: "a9c1262429d095",
-        pass: "****a9cb"
+        user: `${process.env.SMUSER}`,
+        pass: `${process.env.SMPASS}`
       }
     });
 
     const emailOptions = {
       from: '"Test Sender" <test@example.com>',
       to: "recipient@example.com",
-      subject: "Test Email",
-      text: "This is a test email sent via Ethereal!",
-      html: "<p>This is a <b>test email</b> sent via Ethereal!</p>",
+      subject: mailtype === "VERIFY" ? "Verify your email" : "Reset your password",
+            html: `<p>Click <a href="${process.env.DOMAIN}/verifyemail?token=${hashedtoken}">here</a> to ${mailtype === "VERIFY" ? "verify your email" : "reset your password"}
+            or copy and paste the link below in your browser. <br> ${process.env.DOMAIN}/verifyemail?token=${hashedtoken}
+            </p>`
     };
 
     const info = await transport.sendMail(emailOptions);

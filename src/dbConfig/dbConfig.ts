@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
-
+import { DB_NAME } from "@/src/constants"
 export const connectDB = async () => {
   try {
-    const connectionInstance = await mongoose.connect(process.env.MONGO_URI!);
+    const connectionInstance = await mongoose.connect(`${process.env.MONGO_URI}`);
     console.log(`MongoDB connected succesfully!!, Host: ${connectionInstance.connection.host}`)
 
     mongoose.connection.on("disconnected",()=>{
