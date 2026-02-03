@@ -3,14 +3,14 @@ import getTokenData from "@/src/helpers/getTokenData";
 import User from "@/src/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
-export default async function POST(request: NextRequest){
+export async function POST(request: NextRequest){
 
     connectDB();
 
     try {
         
         const userId = await getTokenData(request);
-        const user = await User.findOne({userId});
+        const user = await User.findById(userId);
 
         user.refreshToken = undefined;
         await user.save();

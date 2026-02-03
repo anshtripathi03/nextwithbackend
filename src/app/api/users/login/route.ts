@@ -2,16 +2,15 @@ import { connectDB } from "@/src/dbConfig/dbConfig";
 import User from "@/src/models/userModel";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
-import jwt from "jsonwebtoken"
 
-export default async function POST(request: NextRequest){
+export async function POST(request: NextRequest){
 
-    connectDB();
+    await connectDB();
 
     try {
         
         const reqBody = await request.json();
-        const { username, password} = reqBody;
+        const { username, password } = reqBody;
 
         const user = await User.findOne({username});
         if(!user){
@@ -31,23 +30,22 @@ export default async function POST(request: NextRequest){
         }
         console.log(user);
 
-        const accessToken = user.generateAccessToken();
-        const refreshToken = user.generateRefreshToken();
+        const accessToken = await user.generateAccessToken();
+        const refreshToken = await user.generateRefreshToken();
 
         user.refreshToken = refreshToken;
+        await user.save({ validateBeforeSave: true });
 
-        await user.save();
-
-        const responce = NextResponse.json({
+        const response = NextResponse.json({
             message: "User Successfully Logged In",
             status: 200
         })
 
-        responce.cookies.set("accessTokens", accessToken, {
+        response.cookies.set("accessToken", accessToken, {
             httpOnly: true
         })
 
-        return responce;
+        return response;
 
     } catch (error: any) {
         return NextResponse.json({error: error?.message},

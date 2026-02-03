@@ -2,18 +2,24 @@ import { connectDB } from "@/src/dbConfig/dbConfig";
 import getTokenData from "@/src/helpers/getTokenData";
 import User from "@/src/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
+import jwt from "jsonwebtoken"
 
-export default async function POST(request: NextRequest){
+export async function POST(request: NextRequest){
 
-    connectDB();
+    await connectDB();
 
     try {
         
         const reqBody = await request.json();
         const { refreshToken } = reqBody;
 
-        const userId = await getTokenData(request);
-        const user = await User.findOne({userId});
+        const decodedData: any = jwt.verify(
+            refreshToken,
+            process.env.REFRESH_TOKEN_SECRET!
+        );
+
+        const userId = decodedData.tokenData.id;
+        const user = await User.findById(userId);
 
         if(!(user.refreshToken === refreshToken)){
             return NextResponse.json({
@@ -26,7 +32,8 @@ export default async function POST(request: NextRequest){
 
         const response = NextResponse.json({
             message: "New Access Tokens created successfully",
-            status: 200
+            status: 200,
+            data: user
         })
 
         response.cookies.set("accessToken", accessToken, {
