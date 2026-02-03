@@ -43,15 +43,13 @@ export default function Signup() {
   return (
     <div className="h-screen w-screen text-white bg-black flex flex-col justify-center items-center">
       <div className=" p-12 bg-gray-600 text-2xl flex gap-10 flex-col items-center justify-center rounded-2xl">
-        <h1>
           {error ? (
             <p className="text-red-500">{error}</p>
-          ) : loading ? (
+          ) : <h1 className=" font-bold text-3xl">{loading ? (
             "Processing"
           ) : (
             "Signup"
-          )}
-        </h1>
+          )}</h1>}
         <div className=" flex gap-4 items-center justify-center ">
           <label htmlFor="username">Username :</label>
           <input
