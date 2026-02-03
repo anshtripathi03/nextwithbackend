@@ -2,7 +2,7 @@ import { connectDB } from "@/src/dbConfig/dbConfig";
 import User from "@/src/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
-export default async function POST(request: NextRequest){
+export async function POST(request: NextRequest){
 
     connectDB();
 
@@ -27,7 +27,7 @@ export default async function POST(request: NextRequest){
         user.verifyTokenExpiry = undefined;
         user.isVerified = true;
 
-        await user.save();
+        await user.save({ validateBeforeSave: true});
 
         const responce = NextResponse.json({
             message: "User Email verfied successfully",

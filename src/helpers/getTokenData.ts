@@ -2,19 +2,19 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel";
 
-export default function getTokenData(request: NextRequest){
-    
-    try {
-        
-        const token = request.cookies.get("accessToken")?.value || "";
-        const decodedTokenData: any = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET!)
-        return decodedTokenData.id;
+export default async function getTokenData(request: NextRequest) {
 
-    } catch (error: any) {
+  const token = request.cookies.get("accessToken")?.value || "";
 
-        return NextResponse.json({error: error?.message},
-            {status:500}
-        )
+  if (!token) {
+    throw new Error("Access token missing");
+  }
 
-    }
+  const decodedTokenData: any = jwt.verify(
+    token,
+    process.env.ACCESS_TOKEN_SECRET!,
+  );
+
+  return decodedTokenData.tokenData.id;
+
 }

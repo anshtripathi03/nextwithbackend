@@ -3,14 +3,14 @@ import getTokenData from "@/src/helpers/getTokenData";
 import User from "@/src/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
-export default async function GET(request: NextRequest){
+export async function GET(request: NextRequest){
 
-    connectDB();
+    await connectDB();
 
     try {
         
         const userId = await getTokenData(request);
-        const user = await User.findOne({userId}).select("-password");
+        const user = await User.findById(userId).select("-password");
 
         return NextResponse.json({
             message: "User fetched successfully",

@@ -9,10 +9,12 @@ export async function POST(request: NextRequest){
     await connectDB();
 
     try {
+
         const reqBody = await request.json();
         const {username, email, password} = reqBody;
-
+                
         const user = await User.findOne({email});
+        console.log(user);
 
         if(user){
             return NextResponse.json({error:"User already exist with this email"}, {status: 400});
