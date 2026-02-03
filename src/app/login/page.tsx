@@ -3,6 +3,7 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const [user, setUser] = useState({
@@ -22,8 +23,9 @@ export default function Login() {
         withCredentials: true,
       });
       console.log("Success login call", res.data);
-    //   router.push("/profile");
+      router.push("/Profile");
       setSuccess(true);
+      toast.success("Login Successfull", {duration: 5000})
     } catch (error: any) {
       setError(error?.message || "");
     } finally {
