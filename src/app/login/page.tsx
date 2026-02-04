@@ -1,7 +1,7 @@
 "use client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 
@@ -22,16 +22,19 @@ export default function Login() {
       const res = await axios.post("/api/users/login", user, {
         withCredentials: true,
       });
+      toast.success("Login Successfull", {duration: 1500})
       console.log("Success login call", res.data);
-      router.push("/Profile");
+      setTimeout(()=>{
+        router.push("/Profile");
+      }, 1500)
       setSuccess(true);
-      toast.success("Login Successfull", {duration: 5000})
     } catch (error: any) {
       setError(error?.message || "");
     } finally {
       setLoading(false);
     }
   };
+
   useEffect(() => {
     setSubmit(
       user.username.length > 0 &&
@@ -75,7 +78,7 @@ export default function Login() {
         </div>
         <button
           type="submit"
-          className=" border-2 py-2 px-6 rounded-lg cursor-pointer "
+          className="hover:bg-white hover:text-black border-2 py-2 px-6 rounded-lg cursor-pointer "
           onClick={onLogin}
           disabled={!submit}
         >

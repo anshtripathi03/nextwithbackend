@@ -15,6 +15,7 @@ export default function Signup() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState();
   const [submit, setSubmit] = useState(false);
+  const [ success, setSuccess] = useState(false);
   const router = useRouter();
 
   const onSignup = async () => {
@@ -24,9 +25,12 @@ export default function Signup() {
       const response = await axios.post("/api/users/signup", user, {
         withCredentials: true,
       });
-      console.log("success", response.data);
-      router.push("/login");
-      toast.success("Signup Successfull", {duration: 5000})
+      setSubmit(true);
+      toast.success("Signup Successfull", {duration: 1500})
+      console.log("Success", response.data);
+      setTimeout(()=>{
+        router.push("/login");
+      }, 1500)
     } catch (error: any) {
       setError(error?.message);
     } finally {
@@ -52,6 +56,7 @@ export default function Signup() {
           ) : (
             "Signup"
           )}</h1>}
+          { success ? <p className="text-green-500">"Successfully Signed in!!"</p> : ""}
         <div className=" flex gap-4 items-center justify-center ">
           <label htmlFor="username">Username :</label>
           <input
