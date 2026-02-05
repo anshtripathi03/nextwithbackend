@@ -25,7 +25,7 @@ export default function Login() {
       toast.success("Login Successfull", {duration: 1500})
       console.log("Success login call", res.data);
       setTimeout(()=>{
-        router.push("/Profile");
+        router.push("/");
       }, 1500)
       setSuccess(true);
     } catch (error: any) {
@@ -78,7 +78,7 @@ export default function Login() {
         </div>
         <button
           type="submit"
-          className="hover:bg-white hover:text-black border-2 py-2 px-6 rounded-lg cursor-pointer "
+          className="hover:bg-white hover:text-black hover:border-black hover:border-4 border-2 py-2 px-6 rounded-lg cursor-pointer "
           onClick={onLogin}
           disabled={!submit}
         >

@@ -2,6 +2,7 @@ import { connectDB } from "@/src/dbConfig/dbConfig";
 import User from "@/src/models/userModel";
 import bcrypt from "bcryptjs";
 import { NextRequest, NextResponse } from "next/server";
+import { mailer } from "@/src/helpers/email";
 
 export async function POST(request: NextRequest){
 
@@ -35,6 +36,7 @@ export async function POST(request: NextRequest){
 
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: true });
+        await mailer({ mail: user.email, mailtype:"VERIFY", userID:user._id })
 
         const response = NextResponse.json({
             message: "User Successfully Logged In",
